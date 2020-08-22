@@ -184,10 +184,10 @@ def return_r(inx: int):
 def return_rs(inx: list or tuple):
     global data
     inx = list(inx)
-    temp = []
+    tempc = []
     for x in inx:
-        temp.append(list(data[x]))
-    return temp
+        tempc.append(list(data[x]))
+    return tempc
 
 
 def return_c(inx: int):
@@ -231,4 +231,7 @@ def sort_col(index: int, reverse: bool = False):
     global data
     global cols
     data.sort(key=lambda x: x[index])
+    if reverse:
+        data.reverse()
+
     genid()
