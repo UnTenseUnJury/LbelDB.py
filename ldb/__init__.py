@@ -226,12 +226,9 @@ def update_r(inx: int, val: list or tuple):
     genid()
 
 
-def sort_col(index: int, reverse = False: bool):
-global lbels
-global data
-global cols
-# reverse = None (Sorts in Ascending order)
-# key is set to sort using second element of
-# sublist lambda has been used
-data.sort(key=lambda x: x[index])
-genid()
+def sort_col(index: int, reverse: bool = False):
+    global lbels
+    global data
+    global cols
+    data.sort(key=lambda x: x[index])
+    genid()
