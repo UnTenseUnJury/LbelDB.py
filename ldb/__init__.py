@@ -30,7 +30,7 @@ def init():
         d.close()
 
 
-def create(labels: tuple or list):
+def create(labels: str or tuple or list):
     """
     Creates the Headers or labels:
     To be run at the first run with init()
@@ -45,7 +45,7 @@ def create(labels: tuple or list):
     cols = len(lbels)
 
 
-def clear_r(inx: int or tuple or list):
+def clearR(inx: int or tuple or list):
     """
     Deletes the specified row or rows
     :param inx: index of the row or rows to be deleted
@@ -57,41 +57,50 @@ def clear_r(inx: int or tuple or list):
         except IndexError:
             raise Exception("No rows present or specified index is out of range")
     else:
+        inx = set(inx)
+        inx = list(inx)
+        inx.sort()
+        inx.reverse()
         for x in inx:
             data.pop(x)
     genid()
 
 
-def clear_c(inx: int or tuple or list):
+def clearC(inx: int or tuple or list):
     """
     Deletes the specified columns or columns
     :param inx: index of the column or columns to be deleted
     """
-    global data
-    global lbels
-    global cols
-    if type(inx) == int:
-        lbels.pop(inx)
-        for i in range(len(data)):
-            data[i].pop(inx)
+    if inx >= 0:
+        raise Exception("Index is invalid")
     else:
-        for x in inx:
-            lbels.pop(x)
-    cols = len(lbels)
+        global data
+        global lbels
+        global cols
+        if type(inx) == int:
+            lbels.pop(inx)
+            for i in range(len(data)):
+                data[i].pop(inx)
+        else:
+            for x in inx:
+                lbels.pop(x)
+        cols = len(lbels)
 
 
 def clearall():
+    global data
+    global lbels
+    global cols
     """
-    Deletes the database
+    Deletes the database locally
     :note: does not delete the files
     """
-    l = open("dbs.lbel", "w")
-    l.close()
-    d = open("dat.lbel", "w")
-    d.close()
+    data = []
+    lbels = []
+    cols = 0
 
 
-def add_l(arg: str or list or tuple):
+def addL(arg: str or list or tuple):
     """
     Creates a column in the database
     """
@@ -111,7 +120,7 @@ def add_l(arg: str or list or tuple):
     cols = len(lbels)
 
 
-def add_d(dat: tuple or list):
+def addD(dat: tuple or list):
     """
     Adds a row to the database
     note: Please leave None or an empty string => "" is no data for the respective label if any
@@ -119,13 +128,15 @@ def add_d(dat: tuple or list):
     global data
     global cols
     global idv
+    if type(dat) == int or type(dat) == str:
+        pass
     if cols >= len(dat):
         idv += 1
         dat = list(dat)
         dat.insert(0, idv)
         data.append(dat)
     else:
-        print("Number of columns exceed number of labels")
+        raise Exception("Number of columns exceed number of labels")
 
 
 def store():
@@ -204,7 +215,7 @@ def view():
             print(x)
 
 
-def return_r(inx: int):
+def returnR(inx: int):
     """
     Returns a requested row from the db
     :param inx: The row number
@@ -213,7 +224,7 @@ def return_r(inx: int):
     return data[inx]
 
 
-def return_rs(inx: list or tuple):
+def returnRs(inx: list or tuple):
     """
     Returns the requested rows from the db
     :param inx: list or tuple: The row numbers
@@ -227,7 +238,7 @@ def return_rs(inx: list or tuple):
     return tempc
 
 
-def return_c(inx: int):
+def returnC(inx: int):
     """
     Returns a requested column from the db
     :param inx: The column number
@@ -253,7 +264,7 @@ def genid():
         data[i].insert(0, idv)
 
 
-def update_r(inx: int, val: list or tuple):
+def updateR(inx: int, val: list or tuple):
     """
     Updates the whole selected row
     :param inx: index of the row
@@ -276,7 +287,7 @@ def update_r(inx: int, val: list or tuple):
     genid()
 
 
-def sort_col(index: int, reverse: bool = False):
+def sortCol(index: int, reverse: bool = False):
     """
     Sorts the chosen column in descending order
     :param index: the index of the column
