@@ -1,3 +1,4 @@
+from time import *
 tab = True
 try:
     from tabulate import tabulate
@@ -9,6 +10,7 @@ temp = []
 lbels = []
 data = []
 cols = 0
+is_inio = False
 
 
 def init():
@@ -144,9 +146,16 @@ def store():
     Stores the data in the db
     :Note: This clears everything from local memory and cant be retrieved without retrieve()
     """
+    global is_inio
     global data
     global lbels
     global cols
+    while True:
+        if is_inio:
+            sleep(3)
+        else:
+            break
+    is_inio = True
     with open("dat.lbel", "a") as d:
         for i in data:
             for x in i:
@@ -158,15 +167,22 @@ def store():
             f.write(str(i) + "\n")
         lbels = []
         cols = None
-
+    is_inio = False
 
 def retrieve():
     """
     Retrieves the database from the stored state
     """
+    global is_inio
     global lbels
     global data
     global cols
+    while True:
+        if is_inio:
+            sleep(5)
+        else:
+            break
+    is_inio = True
     with open("dbs.lbel", "r+") as l:
         lbels = [line.rstrip() for line in l]
     cols = len(lbels)
@@ -196,6 +212,7 @@ def retrieve():
                     it += 1
         except ZeroDivisionError:
             raise Exception("Retrieved without adding data to DBs")
+    is_inio = False
 
 
 def view():
