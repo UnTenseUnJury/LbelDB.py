@@ -1,4 +1,5 @@
 from time import *
+
 tab = True
 try:
     from tabulate import tabulate
@@ -23,11 +24,14 @@ def init():
     try:
         l = open("dbs.lbel", "r")
         l.close()
-        d = open("dat.lbel", "r")
-        d.close()
+
     except FileNotFoundError:
         l = open("dbs.lbel", "w")
         l.close()
+    try:
+        d = open("dat.lbel", "r")
+        d.close()
+    except FileNotFoundError:
         d = open("dat.lbel", "w")
         d.close()
 
@@ -47,7 +51,7 @@ def create(labels: str or tuple or list):
     cols = len(lbels)
 
 
-def clearR(inx: int or tuple or list):
+def clear_r(inx: int or tuple or list):
     """
     Deletes the specified row or rows
     :param inx: index of the row or rows to be deleted
@@ -68,7 +72,7 @@ def clearR(inx: int or tuple or list):
     genid()
 
 
-def clearC(inx: int or tuple or list):
+def clear_c(inx: int or tuple or list):
     """
     Deletes the specified columns or columns
     :param inx: index of the column or columns to be deleted
@@ -90,19 +94,19 @@ def clearC(inx: int or tuple or list):
 
 
 def clearall():
+    """
+        Deletes the database locally
+        :note: does not delete the files
+        """
     global data
     global lbels
     global cols
-    """
-    Deletes the database locally
-    :note: does not delete the files
-    """
     data = []
     lbels = []
     cols = 0
 
 
-def addL(arg: str or list or tuple):
+def add_l(arg: str or list or tuple):
     """
     Creates a column in the database
     """
@@ -122,7 +126,7 @@ def addL(arg: str or list or tuple):
     cols = len(lbels)
 
 
-def addD(dat: tuple or list):
+def add_d(dat: tuple or list):
     """
     Adds a row to the database
     note: Please leave None or an empty string => "" is no data for the respective label if any
@@ -168,6 +172,7 @@ def store():
         lbels = []
         cols = None
     is_inio = False
+
 
 def retrieve():
     """
@@ -232,7 +237,7 @@ def view():
             print(x)
 
 
-def returnR(inx: int):
+def return_r(inx: int):
     """
     Returns a requested row from the db
     :param inx: The row number
@@ -241,7 +246,7 @@ def returnR(inx: int):
     return data[inx]
 
 
-def returnRs(inx: list or tuple):
+def return_rs(inx: list or tuple):
     """
     Returns the requested rows from the db
     :param inx: list or tuple: The row numbers
@@ -255,7 +260,7 @@ def returnRs(inx: list or tuple):
     return tempc
 
 
-def returnC(inx: int):
+def return_c(inx: int):
     """
     Returns a requested column from the db
     :param inx: The column number
@@ -281,7 +286,7 @@ def genid():
         data[i].insert(0, idv)
 
 
-def updateR(inx: int, val: list or tuple):
+def update_r(inx: int, val: list or tuple):
     """
     Updates the whole selected row
     :param inx: index of the row
@@ -304,7 +309,7 @@ def updateR(inx: int, val: list or tuple):
     genid()
 
 
-def sortCol(index: int, reverse: bool = False):
+def sort_col(index: int, reverse: bool = False):
     """
     Sorts the chosen column in descending order
     :param index: the index of the column
