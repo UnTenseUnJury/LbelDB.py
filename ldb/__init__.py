@@ -309,6 +309,11 @@ def update_r(inx: int, val: list or tuple):
     genid()
 
 
+def update_ri(inx_r: int, inx_o: int, val):
+    global data
+    data[inx_r][inx_o + 1] = val
+
+
 def sort_col(index: int, reverse: bool = False):
     """
     Sorts the chosen column in descending order
