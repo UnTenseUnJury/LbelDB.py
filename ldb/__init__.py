@@ -1,5 +1,3 @@
-from time import *
-
 tab = True
 try:
     from tabulate import tabulate
@@ -160,9 +158,7 @@ def store():
     global lbels
     global cols
     while True:
-        if is_inio:
-            sleep(3)
-        else:
+        if not is_inio:
             break
     is_inio = True
     with open("dat.lbel", "a") as d:
@@ -188,9 +184,7 @@ def retrieve():
     global data
     global cols
     while True:
-        if is_inio:
-            sleep(5)
-        else:
+        if not is_inio:
             break
     is_inio = True
     with open("dbs.lbel", "r+") as l:
