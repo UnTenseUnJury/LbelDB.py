@@ -45,10 +45,54 @@ def create(labels: str or tuple or list):
     global lbels
     global cols
     global idv
+    if type(labels) == str or type(labels) == int or type(labels) == bool:
+        labels = [labels]
     labels = list(labels)
     labels.insert(0, "id")
     lbels = list(labels)
     cols = len(lbels)
+
+
+def add_c(arg: int or str or list or tuple):
+    """
+    Creates a column in the database
+    """
+    global lbels
+    global data
+    global cols
+    if type(arg) == int or type(arg) == bool:
+        lbels.append(arg)
+        nol = 1
+    else:
+        for i in arg:
+            lbels.append(i)
+        nol = len(arg)
+    for _ in range(nol):
+        for i in range(len(data)):
+            data[i].append("")
+    cols = len(lbels)
+
+
+def add_r(dat: tuple or list):
+    """
+    Adds a row to the database
+    note: Please leave None or an empty string => "" is no data for the respective label if any
+    """
+    global data
+    global cols
+    global idv
+    if type(dat) == int or type(dat) == str or type(dat) == bool:
+        dat = [dat]
+        dat.insert(0, idv)
+        data.append(dat)
+    elif cols > len(dat):
+        idv += 1
+        dat = list(dat)
+        dat.insert(0, idv)
+        data.append(dat)
+    else:
+        raise Exception("Number of columns exceed number of labels")
+    genid()
 
 
 def clear_r(inx: int or tuple or list):
@@ -104,45 +148,6 @@ def clearall():
     data = []
     lbels = []
     cols = 0
-
-
-def add_l(arg: str or list or tuple):
-    """
-    Creates a column in the database
-    """
-    global lbels
-    global data
-    global cols
-    if type(arg) == int:
-        lbels.append(arg)
-        nol = 1
-    else:
-        for i in arg:
-            lbels.append(i)
-        nol = len(arg)
-    for _ in range(nol):
-        for i in range(len(data)):
-            data[i].append("")
-    cols = len(lbels)
-
-
-def add_d(dat: tuple or list):
-    """
-    Adds a row to the database
-    note: Please leave None or an empty string => "" is no data for the respective label if any
-    """
-    global data
-    global cols
-    global idv
-    if type(dat) == int or type(dat) == str:
-        pass
-    if cols >= len(dat):
-        idv += 1
-        dat = list(dat)
-        dat.insert(0, idv)
-        data.append(dat)
-    else:
-        raise Exception("Number of columns exceed number of labels")
 
 
 def store():
@@ -228,8 +233,15 @@ def view():
     """
     global lbels
     global data
+    global temp
+    global cols
     if tab:
-        print(tabulate(data, headers=lbels, tablefmt="fancy_grid"))
+        temp = data
+        for i in temp:
+            if not len(i) == cols:
+                for x in range(cols - len(i)):
+                    temp[temp.index(i)].append("")
+        print(tabulate(temp, headers=lbels, tablefmt="fancy_grid"))
     else:
         print("Module tabulate is a dependency. ModuleNotFound")
         print(lbels)
@@ -310,6 +322,12 @@ def update_r(inx: int, val: list or tuple):
 
 
 def update_ri(inx_r: int, inx_o: int, val):
+    """
+    Updates a single item in a row
+    :param inx_r: index of the row
+    :param inx_o: index of the object
+    :param val: the value of replaced object
+    """
     global data
     data[inx_r][inx_o + 1] = val
 
