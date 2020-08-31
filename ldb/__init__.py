@@ -84,6 +84,8 @@ def add_r(dat: tuple or list):
         dat.insert(0, idv)
         data.append(dat)
     elif cols > len(dat):
+        for i in range(cols - len(dat) - 1):
+            dat.append("")
         idv += 1
         dat = list(dat)
         dat.insert(0, idv)

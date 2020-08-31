@@ -1,6 +1,6 @@
 # LbelDB.py
 
->**A text based no corruption database for python. Easy to use. Made with love for beginners**
+>**A text based no corruption database for python. Easy to use. Made for beginners**
 
 ## Installation
 
