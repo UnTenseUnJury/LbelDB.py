@@ -7,7 +7,7 @@
 Use the package manager pip to install LbelDB.py
 
 ```bash
-pip install lbeldb
+pip install LbelDB
 ```
 
 ## Usage
