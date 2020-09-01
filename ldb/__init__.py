@@ -19,31 +19,23 @@ def init():
     Can be run anytime
     :return: None
     """
-    try:
-        l = open("dbs.lbel", "r")
-        l.close()
-
-    except FileNotFoundError:
-        l = open("dbs.lbel", "w")
-        l.close()
-    try:
-        d = open("dat.lbel", "r")
-        d.close()
-    except FileNotFoundError:
-        d = open("dat.lbel", "w")
-        d.close()
+    open("dbs.lbel", "a").close()
+    open("dat.lbel", "a").close()
 
 
-def create(labels: str or tuple or list):
+def create(labels: str or list or tuple):
     """
     Creates the Headers or labels:
     To be run at the first run with init()
-    :param labels: A list of the headers or labels
+    :param labels: A str, list or tuple of the the headers or labels
     """
     global lbels
     global cols
     global idv
-    if type(labels) == str or type(labels) == int or type(labels) == bool:
+
+    if not (type(labels) == str or type(labels) == list or type(labels) == tuple):
+        raise Exception("Passed value is not a str or list or tuple")
+    if type(labels) == str:
         labels = [labels]
     labels = list(labels)
     labels.insert(0, "id")
@@ -51,14 +43,15 @@ def create(labels: str or tuple or list):
     cols = len(lbels)
 
 
-def add_c(arg: int or str or list or tuple):
+def add_c(arg: str or list or tuple):
     """
     Creates a column in the database
+    :param arg: A str, list or tuple of the labels
     """
     global lbels
     global data
     global cols
-    if type(arg) == int or type(arg) == bool:
+    if type(arg) == int or type(arg) == bool or type(arg) == str:
         lbels.append(arg)
         nol = 1
     else:
@@ -74,7 +67,7 @@ def add_c(arg: int or str or list or tuple):
 def add_r(dat: tuple or list):
     """
     Adds a row to the database
-    note: Please leave None or an empty string => "" is no data for the respective label if any
+    note: An empty string => "" represents missing
     """
     global data
     global cols
@@ -95,7 +88,7 @@ def add_r(dat: tuple or list):
     genid()
 
 
-def clear_r(inx: int or tuple or list):
+def clear_r(inx):
     """
     Deletes the specified row or rows
     :param inx: index of the row or rows to be deleted
@@ -245,13 +238,19 @@ def view():
             print(x)
 
 
-def return_r(inx: int):
+def return_r(inx: int or tuple or list):
     """
     Returns a requested row from the db
     :param inx: The row number
     :return: The requested row
     """
-    return data[inx]
+    if inx:
+        return data[inx]
+    else:
+        temp = []
+        for i in inx:
+            temp += i
+        return temp
 
 
 def return_rs(inx: list or tuple):
