@@ -24,6 +24,8 @@ for i in enumerate(scores):
 
 ldb.store() # stores to the db to the `.lbel` file
 
+ldb.retrieve() # retrieves the db from memory 
+
 ldb.view() # prints the db to the console
 ```
 
