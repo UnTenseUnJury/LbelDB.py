@@ -33,7 +33,7 @@ def create(labels: str or list or tuple):
     global cols
     global idv
 
-    if not (type(labels) in [str,list,tuple]):
+    if not (type(labels) in [str, list, tuple]):
         raise Exception("Passed value is not a str or list or tuple")
     if type(labels) == str:
         labels = [labels]
@@ -51,7 +51,7 @@ def add_c(arg: str or list or tuple):
     global lbels
     global data
     global cols
-    if type(arg) in [int,bool,str]:
+    if type(arg) in [int, bool, str]:
         lbels.append(arg)
         nol = 1
     else:
@@ -72,7 +72,7 @@ def add_r(dat: tuple or list):
     global data
     global cols
     global idv
-    if type(dat) in [int,str,bool]:
+    if type(dat) in [int, str, bool]:
         dat = [dat]
         dat.insert(0, idv)
         data.append(dat)
