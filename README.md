@@ -1,3 +1,5 @@
+[![Downloads](https://pepy.tech/badge/lbeldb)](https://pepy.tech/project/lbeldb)  [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-lightgreen.svg)](http://unlicense.org/) ![version](https://img.shields.io/badge/Version-0.1.1-brightgreen)
+
 # LbelDB.py
 
 >**A text based no corruption database for python. Easy to use. Made for beginners**
