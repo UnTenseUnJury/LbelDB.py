@@ -247,10 +247,10 @@ def return_r(inx: int or tuple or list):
     if inx:
         return data[inx]
     else:
-        temp = []
+        tempv = []
         for i in inx:
-            temp += i
-        return temp
+            tempv += i
+        return tempv
 
 
 def return_rs(inx: list or tuple):
