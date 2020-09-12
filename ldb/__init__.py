@@ -340,3 +340,10 @@ def sort_col(index: int, reverse: bool = False):
     if reverse:
         data.reverse()
     genid()
+
+
+def find(value):
+    for x in data:
+        for y in x:
+            if y == value:
+                return [data.index(x), x.index(y)]
