@@ -96,7 +96,7 @@ def clear_r(inx):
     global data
     if type(inx) == int:
         try:
-            data.pop(inx)
+            data.pop(int(inx))
         except IndexError:
             raise Exception("No rows present or specified index is out of range")
     else:
@@ -105,7 +105,7 @@ def clear_r(inx):
         inx.sort()
         inx.reverse()
         for x in inx:
-            data.pop(x)
+            data.pop(int(x))
     genid()
 
 
@@ -244,27 +244,13 @@ def return_r(inx: int or tuple or list):
     :param inx: The row number
     :return: The requested row
     """
-    if inx:
+    if type(inx) == int:
         return data[inx]
     else:
         tempv = []
         for i in inx:
-            tempv += i
+            tempv += [data[i]]
         return tempv
-
-
-def return_rs(inx: list or tuple):
-    """
-    Returns the requested rows from the db
-    :param inx: list or tuple: The row numbers
-    :return: The requested rows
-    """
-    global data
-    inx = list(inx)
-    tempc = []
-    for x in inx:
-        tempc.append(list(data[x]))
-    return tempc
 
 
 def return_c(inx: int):
@@ -306,13 +292,37 @@ def update_r(inx: int, val: list or tuple):
     val = list(val)
     try:
         if len(val) > cols:
-            print("no of columns in provided list too high")
-            raise AttributeError
+            raise Exception("no of columns in provided list too high")
         data[inx] = val
         data[inx].insert(0, "")
     except IndexError:
         raise Exception("Row number invalid")
     lbels.insert(0, "id")
+    genid()
+
+
+def update_c(inx: int, val: list or tuple):
+    """
+    Updates the whole selected row
+    :param inx: index of the row
+    :param val: a list or tuple of the updated row
+    """
+    global data
+    global cols
+    global lbels
+    if type(val) in [str, bool, int, float]:
+        if len(data) == 1:
+            data[0][inx] = val
+        else:
+            raise Exception("Invalid datatype")
+    else:
+        if len(data) == len(val):
+            for x in range(len(data)):
+                data[x][inx] = val[x]
+        elif len(data) > len(val):
+            raise Exception("Values too less")
+        else:
+            raise Exception("Too many values")
     genid()
 
 
