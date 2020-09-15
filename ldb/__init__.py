@@ -260,7 +260,7 @@ def return_c(inx: int or tuple or list):
     :return: The requested column
     """
     global data
-    tempx = []
+    tempo = []
     tempv = [lbels[inx]]
     if type(inx) == int:
         for i in range(len(data)):
@@ -269,9 +269,9 @@ def return_c(inx: int or tuple or list):
     else:
         for x in inx:
             for i in range(len(data)):
-                tempv.append(data[i][inx])
-            tempx.append(tempv)
-        return tempx
+                tempv.append(data[i][x])
+            tempo.append(tempv)
+        return tempo
 
 
 def genid():
