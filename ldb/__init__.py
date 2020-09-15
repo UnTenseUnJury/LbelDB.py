@@ -253,17 +253,25 @@ def return_r(inx: int or tuple or list):
         return tempv
 
 
-def return_c(inx: int):
+def return_c(inx: int or tuple or list):
     """
     Returns a requested column from the db
     :param inx: The column number
     :return: The requested column
     """
     global data
+    tempx = []
     tempv = [lbels[inx]]
-    for i in range(len(data)):
-        tempv.append(data[i][inx])
-    return tempv
+    if type(inx) == int:
+        for i in range(len(data)):
+            tempv.append(data[i][inx])
+        return tempv
+    else:
+        for x in inx:
+            for i in range(len(data)):
+                tempv.append(data[i][inx])
+            tempx.append(tempv)
+        return tempx
 
 
 def genid():
