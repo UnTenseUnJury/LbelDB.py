@@ -5,7 +5,6 @@ import ldb
 while True:
     cmd = str(input("LDB > "))
     cmd = cmd.split(" ")
-    # cmd[0].lower() == "create"
     if cmd[0].lower() == "exit":
         break
     elif cmd[0].lower() == "init":
