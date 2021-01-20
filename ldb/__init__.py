@@ -28,6 +28,7 @@ def create(labels: str or list or tuple):
     Creates the Headers or labels:
     To be run at the first run with init()
     :param labels: A str, list or tuple of the the headers or labels
+    :return: None
     """
     global lbels
     global cols
@@ -47,6 +48,7 @@ def add_c(arg: str or list or tuple):
     """
     Creates a column in the database
     :param arg: A str, list or tuple of the labels
+    :return: None
     """
     global lbels
     global data
@@ -67,7 +69,8 @@ def add_c(arg: str or list or tuple):
 def add_r(dat: tuple or list):
     """
     Adds a row to the database
-    note: An empty string => "" represents missing
+    :note: An empty string => "" represents missing
+    :return: None
     """
     global data
     global cols
@@ -91,7 +94,8 @@ def add_r(dat: tuple or list):
 def clear_r(inx):
     """
     Deletes the specified row or rows
-    :param inx: index of the row or rows to be deleted
+    :param inx: Index of the row or rows to be deleted
+    :return: None
     """
     global data
     if type(inx) == int:
@@ -112,7 +116,8 @@ def clear_r(inx):
 def clear_c(inx: int or tuple or list):
     """
     Deletes the specified columns or columns
-    :param inx: index of the column or columns to be deleted
+    :param inx: Index of the column or columns to be deleted
+    :return: None
     """
     if inx >= 0:
         raise Exception("Index is invalid")
@@ -132,9 +137,10 @@ def clear_c(inx: int or tuple or list):
 
 def clearall():
     """
-        Deletes the database locally
-        :note: does not delete the files
-        """
+    Deletes the database locally
+    :note: Does not delete the files
+    :return: None
+    """
     global data
     global lbels
     global cols
@@ -147,6 +153,7 @@ def store():
     """
     Stores the data in the db
     :Note: This clears everything from local memory and cant be retrieved without retrieve()
+    :return: None
     """
     global is_inio
     global data
@@ -173,6 +180,7 @@ def store():
 def retrieve():
     """
     Retrieves the database from the stored state
+    :return: None
     """
     global is_inio
     global lbels
@@ -219,6 +227,7 @@ def view():
     View the data base
     Better results if using Tabulate module but not necessary
     Note: Not to be used with intensive databases as it can be resource intensive
+    :return: The string view of the db
     """
     global lbels
     global data
@@ -230,12 +239,10 @@ def view():
             if not len(i) == cols:
                 for x in range(cols - len(i)):
                     temp[temp.index(i)].append("")
-        print(tabulate(temp, headers=lbels, tablefmt="fancy_grid"))
+        return tabulate(temp, headers=lbels, tablefmt="fancy_grid")
     else:
         print("Module tabulate is a dependency. ModuleNotFound")
-        print(lbels)
-        for x in data:
-            print(x)
+        return {[lbels] + [data]}
 
 
 def return_r(inx: int or tuple or list):
@@ -277,6 +284,7 @@ def return_c(inx: int or tuple or list):
 def genid():
     """
     Use only if ids generated a corrupt
+    :return: None
     """
     global data
     global idv
@@ -292,6 +300,7 @@ def update_r(inx: int, val: list or tuple):
     Updates the whole selected row
     :param inx: index of the row
     :param val: a list or tuple of the updated row
+    :return: None
     """
     global data
     global cols
@@ -314,6 +323,7 @@ def update_c(inx: int, val: list or tuple):
     Updates the whole selected row
     :param inx: index of the row
     :param val: a list or tuple of the updated row
+    :return: None
     """
     global data
     global cols
@@ -340,6 +350,7 @@ def update_ri(inx_r: int, inx_o: int, val):
     :param inx_r: index of the row
     :param inx_o: index of the object
     :param val: the value of replaced object
+    :return: None
     """
     global data
     data[inx_r][inx_o + 1] = val
@@ -348,8 +359,9 @@ def update_ri(inx_r: int, inx_o: int, val):
 def sort_col(index: int, reverse: bool = False):
     """
     Sorts the chosen column in descending order
-    :param index: the index of the column
-    :param reverse: reverse = True or False
+    :param index: The index of the column
+    :param reverse: Reverse = True or False
+    :return: None
     """
     global lbels
     global data
@@ -361,7 +373,20 @@ def sort_col(index: int, reverse: bool = False):
 
 
 def find(value):
+    """
+    Find the index of a given value
+    :param value: The value to be searched
+    """
+    global data
     for x in data:
         for y in x:
             if y == value:
                 return [data.index(x), x.index(y)]
+
+
+def exportjson():
+    """
+    Export the database as a Json file
+    :return: None
+    """
+    pass
