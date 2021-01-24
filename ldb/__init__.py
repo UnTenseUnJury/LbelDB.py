@@ -1,3 +1,5 @@
+import json
+
 tab = True
 try:
     from tabulate import tabulate
@@ -386,7 +388,21 @@ def find(value):
 
 def exportjson():
     """
-    Export the database as a Json file
+    Export the database as a JSON file
     :return: None
     """
-    pass
+    global is_inio
+    while True:
+        if not is_inio:
+            break
+    is_inio = True
+
+    res = {}
+    for i in data:
+        res[i[0]] = {}
+        for j in range(cols):
+            if j > 0:
+                res[i[0]][lbels[j]] = i[j]
+
+    with open("ldb.json", "w") as f:
+        json.dump(res, f)
