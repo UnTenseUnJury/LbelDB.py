@@ -1,3 +1,4 @@
+import os
 import json
 
 tab = True
@@ -6,6 +7,10 @@ try:
 except ModuleNotFoundError:
     tab = False
 
+path = ".ldbs\\default"
+c_file = "dbs.lbell"
+cd_file = "dat.lbeld"
+
 idv = 10000
 temp = []
 lbels = []
@@ -13,30 +18,29 @@ data = []
 cols = 0
 is_inio = False
 
+default = [int, float, complex, str, list, tuple, set, bool]
+sing = [int, float, complex, str, bool]
+
 
 def init():
-    """
-    Creates the required files
-    Should be run for initialization
-    Can be run anytime
-    :return: None
-    """
-    open("dbs.lbel", "a").close()
-    open("dat.lbel", "a").close()
+    try:
+        os.mkdir(".ldbs")
+        os.mkdir(path)
+    except FileExistsError:
+        pass
+    open(os.path.join(path, c_file), "a").close()
+    open(os.path.join(path, cd_file), "a").close()
 
 
-def create(labels: str or list or tuple):
+def create(labels):
     """
     Creates the Headers or labels:
     To be run at the first run with init()
-    :param labels: A str, list or tuple of the the headers or labels
-    :return: None
     """
     global lbels
     global cols
     global idv
-
-    if not (type(labels) in [str, list, tuple]):
+    if not (type(labels) in default):
         raise Exception("Passed value is not a str or list or tuple")
     if type(labels) == str:
         labels = [labels]
@@ -49,13 +53,11 @@ def create(labels: str or list or tuple):
 def add_c(arg: str or list or tuple):
     """
     Creates a column in the database
-    :param arg: A str, list or tuple of the labels
-    :return: None
     """
     global lbels
     global data
     global cols
-    if type(arg) in [int, bool, str]:
+    if type(arg) in sing:
         lbels.append(arg)
         nol = 1
     else:
@@ -77,7 +79,7 @@ def add_r(dat: tuple or list):
     global data
     global cols
     global idv
-    if type(dat) in [int, str, bool]:
+    if type(dat) in sing:
         dat = [dat]
         dat.insert(0, idv)
         data.append(dat)
@@ -149,79 +151,6 @@ def clearall():
     data = []
     lbels = []
     cols = 0
-
-
-def store():
-    """
-    Stores the data in the db
-    :Note: This clears everything from local memory and cant be retrieved without retrieve()
-    :return: None
-    """
-    global is_inio
-    global data
-    global lbels
-    global cols
-    while True:
-        if not is_inio:
-            break
-    is_inio = True
-    with open("dat.lbel", "a") as d:
-        for i in data:
-            for x in i:
-                d.write(str(x) + "\n")
-        data = []
-
-    with open("dbs.lbel", "w") as f:
-        for i in lbels:
-            f.write(str(i) + "\n")
-        lbels = []
-        cols = None
-    is_inio = False
-
-
-def retrieve():
-    """
-    Retrieves the database from the stored state
-    :return: None
-    """
-    global is_inio
-    global lbels
-    global data
-    global cols
-    while True:
-        if not is_inio:
-            break
-    is_inio = True
-    with open("dbs.lbel", "r+") as l:
-        lbels = [line.rstrip() for line in l]
-    cols = len(lbels)
-    file = open("dat.lbel", "r+")
-    counter = 0
-    content = file.read()
-    colist = content.split("\n")
-    for i in colist:
-        if i:
-            counter += 1
-    file.close()
-    with open("dat.lbel", "r+") as f:
-        lines = list(f.read().splitlines())
-        try:
-            for a in range(int((counter / cols + 1))):
-                global temp
-                it = 1
-                temp = []
-                for i in lines:
-                    temp.append(i)
-                    if it == cols:
-                        data.append(temp)
-                        temp = []
-                        for _ in range(cols):
-                            lines.pop(0)
-                        break
-                    it += 1
-        except ZeroDivisionError:
-            raise Exception("Retrieved without adding data to DBs")
-    is_inio = False
 
 
 def view():
@@ -297,7 +226,7 @@ def genid():
         data[i].insert(0, idv)
 
 
-def update_r(inx: int, val: list or tuple):
+def update_r(inx: int, val: list or tuple or set):
     """
     Updates the whole selected row
     :param inx: index of the row
@@ -320,7 +249,7 @@ def update_r(inx: int, val: list or tuple):
     genid()
 
 
-def update_c(inx: int, val: list or tuple):
+def update_c(inx: int, val):
     """
     Updates the whole selected row
     :param inx: index of the row
@@ -330,11 +259,8 @@ def update_c(inx: int, val: list or tuple):
     global data
     global cols
     global lbels
-    if type(val) in [str, bool, int, float]:
-        if len(data) == 1:
-            data[0][inx] = val
-        else:
-            raise Exception("Invalid datatype")
+    if type(val) in sing:
+        data[0][inx] = val
     else:
         if len(data) == len(val):
             for x in range(len(data)):
@@ -406,3 +332,116 @@ def exportjson():
 
     with open("ldb.json", "w") as f:
         json.dump(res, f)
+
+
+def retrieve():
+    """
+    Retrieves the database from the stored state
+    :return: None
+    """
+    global is_inio
+    global lbels
+    global data
+    global cols
+    while True:
+        if not is_inio:
+            break
+    is_inio = True
+    with open(os.path.join(path, c_file), "r+") as l:
+        lbels = [line.rstrip() for line in l]
+    cols = len(lbels)
+    file = open(os.path.join(path, cd_file), "r+")
+    counter = 0
+    content = file.read()
+    colist = content.split("\n")
+    for i in colist:
+        if i:
+            counter += 1
+    file.close()
+    with open(os.path.join(path, cd_file), "r+") as f:
+        lines = list(f.read().splitlines())
+        try:
+            for a in range(int((counter / cols + 1))):
+                global temp
+                it = 1
+                temp = []
+                for i in lines:
+                    temp.append(i)
+                    if it == cols:
+                        data.append(temp)
+                        temp = []
+                        for _ in range(cols):
+                            lines.pop(0)
+                        break
+                    it += 1
+        except ZeroDivisionError:
+            raise Exception("Retrieved without adding data to DBs")
+    is_inio = False
+
+
+def store():
+    """
+    Stores the data in the db
+    :Note: This clears everything from local memory and cant be retrieved without retrieve()
+    :return: None
+    """
+    global is_inio
+    global data
+    global lbels
+    global cols
+    while True:
+        if not is_inio:
+            break
+    is_inio = True
+    with open(os.path.join(path, c_file), "a") as d:
+        for i in data:
+            for x in i:
+                d.write(str(x) + "\n")
+        data = []
+
+    with open(os.path.join(path, cd_file), "w") as f:
+        for i in lbels:
+            f.write(str(i) + "\n")
+        lbels = []
+        cols = None
+    is_inio = False
+
+
+def new(name: str):
+    try:
+        os.mkdir(f".ldbs\\{name}")
+        open(os.path.join(f".ldbs\\{name}", f"{name}.lbell"), "a").close()
+        open(os.path.join(path, f"{name}.lbeld"), "a").close()
+    except FileExistsError:
+        print("FileExists")
+
+
+def delete(name: str):
+    if os.path.exists(f".ldbs\\{name}"):
+        os.rmdir(f".ldbs\\{name}")
+    else:
+        print("The file does not exist")
+
+
+def switch(name):
+    global path
+    global c_file
+    global cd_file
+    try:
+        open(os.path.join(f".ldbs\\{name}", f"{name}.lbell"), "a").close()
+        open(os.path.join(f".ldbs\\{name}", f"{name}.lbeld"), "a").close()
+    except FileNotFoundError:
+        raise Exception("DB doesn't exist")
+    store()
+
+    path = f".ldbs\\{name}"
+    c_file = f"{name}.lbell"
+    cd_file = f"{name}.lbeld"
+
+    with open(os.path.join(path, c_file), "r") as d:
+        nope = False
+        if d.read() == "":
+            nope = True
+
+    if not nope:
+        retrieve()
