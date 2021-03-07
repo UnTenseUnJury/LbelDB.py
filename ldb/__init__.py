@@ -408,15 +408,21 @@ def store():
 
 
 def new(name: str):
+    """
+    Create new DB
+    """
     try:
         os.mkdir(f".ldbs\\{name}")
         open(os.path.join(f".ldbs\\{name}", f"{name}.lbell"), "a").close()
         open(os.path.join(path, f"{name}.lbeld"), "a").close()
     except FileExistsError:
-        print("FileExists")
+        raise Exception("Database already exists")
 
 
 def delete(name: str):
+    """
+    Deletes the DB
+    """
     if os.path.exists(f".ldbs\\{name}"):
         os.rmdir(f".ldbs\\{name}")
     else:
@@ -424,6 +430,9 @@ def delete(name: str):
 
 
 def switch(name):
+    """
+    Switch to the required DB
+    """
     global path
     global c_file
     global cd_file
