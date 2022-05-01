@@ -318,9 +318,8 @@ def exportjson():
     :return: None
     """
     global is_inio
-    while True:
-        if not is_inio:
-            break
+    while is_inio:
+        pass
     is_inio = True
 
     res = {}
@@ -389,9 +388,8 @@ def store():
     global data
     global lbels
     global cols
-    while True:
-        if not is_inio:
-            break
+    while is_inio:
+        pass
     is_inio = True
     with open(os.path.join(path, c_file), "a") as d:
         for i in data:
