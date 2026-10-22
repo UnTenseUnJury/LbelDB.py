@@ -1,0 +1,54 @@
+# Packaging for LbelDB - author: UnTenseUnJury
+# Build:   python -m build        (creates dist/*.whl and dist/*.tar.gz)
+# Upload:  python -m twine upload dist/*
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "LbelDB"
+version = "2.0.0"
+description = "A small, beginner-friendly, text-based database for Python."
+readme = "README.md"
+authors = [{ name = "UnTenseUnJury" }]
+license = "Unlicense"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"   # every Python version still maintained; all tested in CI
+keywords = ["database", "beginner", "json", "table"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Education",
+    "Topic :: Database",
+]
+
+[project.optional-dependencies]
+# pip install "LbelDB[pretty]"  -> nicer tables in view()
+pretty = ["tabulate"]
+# pip install "LbelDB[test]"    -> run the tests with:  python -m pytest
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://github.com/UnTenseUnJury/LbelDB.py"
+Changelog = "https://github.com/UnTenseUnJury/LbelDB.py/blob/master/changed.md"
+Issues = "https://github.com/UnTenseUnJury/LbelDB.py/issues"
+
+[project.scripts]
+# installs an `ldb` command that opens the interactive console
+ldb = "ldb.console:main"
+
+[tool.setuptools]
+# Listing the package explicitly is what was missing before: the 1.0.0
+# upload on PyPI contained no code at all, so `import ldb` failed.
+packages = ["ldb"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

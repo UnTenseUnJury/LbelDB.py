@@ -4,3 +4,16 @@
 /dat.lbel
 /stats.py
 /setup.py
+
+# databases and exports created while trying things out
+.ldbs/
+ldb.json
+
+# Python / packaging / test leftovers
+__pycache__/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
